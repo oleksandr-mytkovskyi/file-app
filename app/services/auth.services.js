@@ -7,6 +7,6 @@ exports.login = async (req, res, next) => {
     
     const {tokens} = await auth.Oauth2Client.getToken(code);
     auth.Oauth2Client.setCredentials(tokens);
-  
-    res.status(200).send({login:tokens});
+    res.redirect(`http://localhost:3000/hello.html?access_token=${tokens.access_token}`)
+    // res.status(200).send({login:tokens});
 }
