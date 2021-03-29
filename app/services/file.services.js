@@ -28,7 +28,7 @@ exports.createTransformStream = (fileName) => {
             lastModified: lastModified,
             size: contentLength
         };
-        console.log(data);
+        // console.log(data);
         //Save in DB
         const file = new Files(data);
         const resSave = await file.save(file);
