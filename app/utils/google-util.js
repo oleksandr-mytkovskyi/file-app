@@ -10,7 +10,7 @@ const Oauth2Client = new google.auth.OAuth2(
 );
 
 const defaultScope = [
-    'https://www.googleapis.com/auth/plus.me',
+    'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
   ];
 

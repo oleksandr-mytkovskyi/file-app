@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const file = require("../controllers/file.controller.js");
+const file = require('../controllers/file.controller.js');
+const auth = require('../middleware/auth.middleware');
 
 module.exports = app => {
     // Create a new file in Azure and DB
@@ -7,5 +8,5 @@ module.exports = app => {
     // Get all file with DB
     router.get("/", file.getFile);
  
-    app.use('/file', router);
+    app.use('/file',  router);
   };

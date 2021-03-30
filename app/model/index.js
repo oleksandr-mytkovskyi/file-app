@@ -9,6 +9,6 @@ const db = {};
 
 db.mongoose = mongoose;
 db.url = process.env.URL_DB;
-db.files = require('./models/file.model.js');
+db.files = require('./file.model.js');
 
 module.exports = db;
