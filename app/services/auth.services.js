@@ -12,8 +12,7 @@ exports.loginSocial = async (req, res, next, userData) => {
         const findUser = await User.find({ email: `${userData.email}` });
         // перевірили чи є такий юзер, якщо нема, то створили
         if (findUser.length === 0) {
-            const user = new User(userData);
-            await user.save(user);
+            await User.create(userData);
         }
 
         res.status(200).send({
@@ -32,9 +31,9 @@ exports.loginSocial = async (req, res, next, userData) => {
 
 exports.reg = async (req, res, next) => {
     try {
-        const {email, password, name} = req.body;
+        const { email, password, name } = req.body;
         const findUser = await User.find({ email: email });
-        if(findUser.length !== 0) {
+        if (findUser.length !== 0) {
             const e = new Error('email already in use, maybe you need login');
             e.status = 400;
             throw e;
@@ -45,9 +44,9 @@ exports.reg = async (req, res, next) => {
                 if (err) {
                     throw new Error('Error in hash callback');
                 }
-              
-                const accessToken = await jwt.createToken( email, name, {type: 'access'});
-                const refreshToken = await jwt.createToken( email, name, {type: 'refresh'});
+
+                const accessToken = await jwt.createToken(email, name, { type: 'access' });
+                const refreshToken = await jwt.createToken(email, name, { type: 'refresh' });
 
                 const field = {
                     name: name,
@@ -66,12 +65,60 @@ exports.reg = async (req, res, next) => {
                 next(e);
             }
         });
-        
-    } catch(e) {
+
+    } catch (e) {
         next(e);
     }
-}  
+}
 
-exports.login = (req, res, next) => {
+exports.login = async (req, res, next) => {
+    try {
+        const findUser = await User.find({ email: req.body.email });
+        if (findUser.length === 0) {
+            const e = new Error('dont email, maybe you need reg');
+            e.status = 400;
+            throw e;
+        }
+        const hash = findUser[0].password;
+        const { email, name } = findUser[0];
+        // console.log(email, name);
+        bcrypt.compare(req.body.password, hash, async function (err, result) {
+            try {
+                if (err) {
+                    throw new Error('Error in hash callback on Login');
+                }
+                if (!result) {
+                    const e = new Error('Password incorect');
+                    e.status = 400;
+                    throw e;
+                }
 
+                const obj = await refreshTokens(email, name);
+                res.send(obj);
+            } catch (e) {
+                res.status(401).send({
+                    message: e.message
+                })
+            }
+        });
+
+    } catch (e) {
+        res.status(401).send({
+            message: e.message
+        })
+    }
+}
+
+async function refreshTokens(email, name) {
+    const newAccessToken = await jwt.createToken(email, name, { type: 'access' });
+    const newRefreshToken = await jwt.createToken(email, name, { type: 'refresh' });
+
+    await User.updateOne({ email: email }, { refreshToken: newRefreshToken }, function (err, result) {
+        if (err) throw new Error(err);
+    });
+    return {
+        success: true,
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken
+    };
 }

@@ -1,6 +1,7 @@
 const auth = require('../utils/google-util');
 const authServices = require('../services/auth.services');
 const { default: axios } = require('axios');
+const googleAuth = require('../utils/google-util');
 
 exports.redirectSocial = (req, res, next) => {
     const url = googleAuth.getConnectionUrl();
