@@ -15,6 +15,7 @@ exports.loginSocial = async (req, res, next) => {
 
     const {tokens} = await auth.Oauth2Client.getToken(code);
     auth.Oauth2Client.setCredentials(tokens);
+    console.log(tokens);
     const {access_token, refresh_token, scope, token_type, id_token} = tokens;
     //отримали дані про користувача з google арі
     const dataAccessToken = await axios.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${access_token}`);

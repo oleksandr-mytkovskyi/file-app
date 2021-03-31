@@ -6,15 +6,22 @@ const User = db.user;
 
 exports.loginSocial = async (req, res, next, userData) => {
     try {
-        const accessToken = await jwt.createToken(userData.email, userData.name, { type: 'access' });
-        const refreshToken = await jwt.createToken(userData.email, userData.name, { type: 'refresh' });
+        const {email, name, socialAuth} = userData;
+        const accessToken = await jwt.createToken(email, name, { type: 'access' });
+        const refreshToken = await jwt.createToken(email, name, { type: 'refresh' });
         userData.refreshToken = refreshToken;
-        const findUser = await User.find({ email: `${userData.email}` });
+        const findUser = await User.find({ email: email });
         // перевірили чи є такий юзер, якщо нема, то створили
+        console.log(email);
         if (findUser.length === 0) {
             await User.create(userData);
         }
-
+        //for google
+        if(!findUser[0].socialAuth.gUserId) {
+            await User.updateOne({ email: email }, { socialAuth:{gUserId: socialAuth.gUserId, fbUserId: findUser[0].socialAuth.fbUserId} }, function (err, result) {
+                if (err) throw new Error(err);
+            });
+        }
         res.status(200).send({
             success: true,
             accessToken: accessToken,
