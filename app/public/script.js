@@ -1,19 +1,19 @@
 const login = document.querySelector('.login');
 
-document.addEventListener("DOMContentLoaded", (e) => {
-    fetch('http://localhost:3000/auth/')
-    .then(data => {
-      return data.json();
-    })
-    .then(data => {
-      url = data.url;
-      let div = document.createElement('div');
-      div.innerHTML = `<a href=${url}>Login</a>`;
+// document.addEventListener("DOMContentLoaded", (e) => {
+//     fetch('http://localhost:3000/auth/')
+//     .then(data => {
+//       return data.json();
+//     })
+//     .then(data => {
+//       url = data.url;
+//       let div = document.createElement('div');
+//       div.innerHTML = `<a href=${url}>Login</a>`;
 
-      document.body.append(div);
-    })
+//       document.body.append(div);
+//     })
     
-});
+// });
 
 
 const getFileForm = document.querySelector("#getFileForm");
