@@ -17,7 +17,12 @@ const privatKeyAccess = process.env.publicKeyA ? process.env.privatKeyA : getKey
 const publickKeyRefresh = process.env.publicKeyA ? process.env.publicKeyR : getKey(publicUrlR);
 const privatKeyRefresh = process.env.publicKeyA ? process.env.privatKeyR : getKey(privatUrlR);
 
-exports.createToken = async (id, email, userName, roleId, options) => {
+// console.log(publickKeyAccess);
+// console.log(privatKeyAccess);
+// console.log(publickKeyRefresh);
+// console.log(privatKeyRefresh);
+
+exports.createToken = async (email, name, options) => {
     let signature = null;
     let expiresIn = null;
     switch (options.type) {
@@ -34,10 +39,8 @@ exports.createToken = async (id, email, userName, roleId, options) => {
     }
     return jwt.sign(
         { 
-            id,
-            email,
-            userName,
-            roleId
+           email,
+           name
         },
         signature,
         {   

@@ -1,5 +1,10 @@
 const login = document.querySelector('.login');
+// const gLogin = document.querySelector('.google-login');
 
+// gLogin.addEventListener('click', (e) => {
+//   e.preventDefault();
+//   fetch('http://localhost:3000/auth/login/google')
+// });
 // document.addEventListener("DOMContentLoaded", (e) => {
 //     fetch('http://localhost:3000/auth/')
 //     .then(data => {

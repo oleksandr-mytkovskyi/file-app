@@ -10,5 +10,7 @@ const db = {};
 db.mongoose = mongoose;
 db.url = process.env.URL_DB;
 db.files = require('./file.model.js');
+db.user = require('./user.model.js');
+
 
 module.exports = db;
