@@ -1,29 +1,20 @@
-const {google} = require('googleapis');
+const queryString = require('query-string');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-const Oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URL
-);
+const stringifiedParams = queryString.stringify({
+  client_id: process.env.FACEBOOK_CLIENT_ID,
+  redirect_uri: process.env.FACEBOOK_REDIRECT_URI,
+  scope: ['email', 'user_friends'].join(','), // comma seperated string
+  response_type: 'code',
+  auth_type: 'rerequest',
+  // display: 'popup',
+});
 
-const defaultScope = [
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email',
-  ];
+const facebookLoginUrl = `https://www.facebook.com/v4.0/dialog/oauth?${stringifiedParams}`;
 
-
-function getConnectionUrl() {
-    return Oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        prompt: 'consent',
-        scope: defaultScope
-    });
-}
 
 module.exports = {
-    getConnectionUrl,
-    Oauth2Client,
+  facebookLoginUrl
 }

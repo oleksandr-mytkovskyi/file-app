@@ -23,7 +23,7 @@ function createHash(password) {
     return hash;
 }
 
-exports.loginSocial = async (req, res, next, userData) => {
+exports.loginSocial = async (req, res, next, userData, options) => {
     try {
         const { email, name, socialAuth } = userData;
         const accessToken = await jwt.createToken(email, name, { type: 'access' });
@@ -34,12 +34,37 @@ exports.loginSocial = async (req, res, next, userData) => {
         if (findUser.length === 0) {
             await User.create(userData);
         }
-        //for google
-        if (findUser.length !== 0 && !findUser[0].socialAuth.gUserId) {
-            await User.updateOne({ email: email }, { socialAuth: { gUserId: socialAuth.gUserId, fbUserId: findUser[0].socialAuth.fbUserId } }, function (err, result) {
-                if (err) throw new Error(err);
-            });
+        // updata facebook id 
+        if (findUser.length !== 0 && options.type === 'facebook' && !findUser[0].socialAuth.fbUserId) {
+            console.log('updata fb');
+            await User.updateOne(
+                { email: email },
+                {
+                    socialAuth: {
+                        gUserId: findUser[0].socialAuth.gUserId,
+                        fbUserId: socialAuth.fbUserId
+                    }
+                },
+                function (err, result) {
+                    if (err) throw new Error(err);
+                });
         }
+        // updata google id 
+        if (findUser.length !== 0 && options.type === 'google' && !findUser[0].socialAuth.gUserId) {
+            console.log('updata google');
+            await User.updateOne(
+                { email: email },
+                {
+                    socialAuth: {
+                        gUserId: socialAuth.gUserId,
+                        fbUserId: findUser[0].socialAuth.fbUserId
+                    }
+                },
+                function (err, result) {
+                    if (err) throw new Error(err);
+                });
+        }
+
         res.status(200).send({
             success: true,
             accessToken: accessToken,
