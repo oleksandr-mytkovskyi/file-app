@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const path = require("path");
+const path = require('path');
 
 const publicUrlA = path.resolve('./publicKeyA');
 const privatUrlA = path.resolve('./privatKeyA');
