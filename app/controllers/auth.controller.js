@@ -1,8 +1,9 @@
-const auth = require('../utils/google-util');
+const auth = require('../utils/googleAuth');
 const authServices = require('../services/auth.services');
 const { default: axios } = require('axios');
-const googleAuth = require('../utils/google-util');
+const googleAuth = require('../utils/googleAuth');
 
+// google auth
 exports.redirectGoogle = (req, res, next) => {
     const url = googleAuth.getConnectionUrl();
     res.redirect(url);
@@ -29,7 +30,21 @@ exports.loginGoogle = async (req, res, next) => {
     }
     authServices.loginSocial(req, res, next, userData);
 }
+// Facebook auth
+exports.redirectFacebook = (req, res, next) => {
+    // const url = googleAuth.getConnectionUrl();
+    // res.redirect(url);
+    res.send('fb redirect');
+}
+// Facebook auth
+exports.loginFacebook = (req, res, next) => {
+    // const url = googleAuth.getConnectionUrl();
+    // res.redirect(url);
+    res.send('fb Login');
+}
 
+
+// custom auth
 exports.reg = (req, res, next) => {
     authServices.reg(req, res, next);
 }
