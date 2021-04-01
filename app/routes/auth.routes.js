@@ -1,4 +1,4 @@
-const googleAuth = require('../utils/google-util');
+const googleAuth = require('../utils/googleAuth');
 const router = require('express').Router();
 const auth = require('../controllers/auth.controller');
 const { userSchemaLogin, userSchemaReg } = require('../validators/auth.validator');
@@ -8,6 +8,10 @@ module.exports = app => {
   router.get("/login/google", auth.redirectGoogle);
 
   router.get("/redirect/google", auth.loginGoogle);
+
+  router.get("/login/facebook", auth.redirectFacebook);
+
+  router.get("/redirect/facebook", auth.loginFacebook);
 
   // router.get("/login/facebook", (req, res, next) => {
   //   const url = googleAuth.getConnectionUrl();
