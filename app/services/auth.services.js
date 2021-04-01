@@ -60,6 +60,7 @@ exports.reg = async (req, res, next) => {
         const hash = createHash(password);
         const findUser = await User.find({ email: email });
         if (findUser.length !== 0 && !!findUser[0].password) {
+            // there are login and password in the DB
             const e = new Error('email already in use, maybe you need login');
             e.status = 400;
             throw e;
@@ -75,6 +76,7 @@ exports.reg = async (req, res, next) => {
                 refreshToken,
             });
         } else {
+            // save new user
             const field = {
                 name: name,
                 email: email,
@@ -104,7 +106,6 @@ exports.login = async (req, res, next) => {
         }
         const hash = findUser[0].password;
         const { email, name } = findUser[0];
-        // console.log(email, name);
         bcrypt.compare(req.body.password, hash, async function (err, result) {
             try {
                 if (err) {
