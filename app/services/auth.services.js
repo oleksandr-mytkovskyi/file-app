@@ -4,6 +4,20 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const User = db.user;
 
+async function refreshTokens(email, name) {
+    const newAccessToken = await jwt.createToken(email, name, { type: 'access' });
+    const newRefreshToken = await jwt.createToken(email, name, { type: 'refresh' });
+
+    await User.updateOne({ email: email }, { refreshToken: newRefreshToken }, function (err, result) {
+        if (err) throw new Error(err);
+    });
+    return {
+        success: true,
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken
+    };
+}
+
 exports.loginSocial = async (req, res, next, userData) => {
     try {
         const {email, name, socialAuth} = userData;
@@ -116,16 +130,23 @@ exports.login = async (req, res, next) => {
     }
 }
 
-async function refreshTokens(email, name) {
-    const newAccessToken = await jwt.createToken(email, name, { type: 'access' });
-    const newRefreshToken = await jwt.createToken(email, name, { type: 'refresh' });
+exports.refresh = (req, res, next) => {
 
-    await User.updateOne({ email: email }, { refreshToken: newRefreshToken }, function (err, result) {
-        if (err) throw new Error(err);
-    });
-    return {
-        success: true,
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken
-    };
+}
+
+exports.refresh = async (req, res, next) => {
+    try {
+        const {refreshToken} = req.body;
+        const parseToken = jwt.checkToken(refreshToken,  {type: 'refresh'});
+        if(!parseToken) {
+            const e = new Error('Refresh token not valid');
+            e.status = 400;
+            throw e;
+        }
+        const {email, name} = parseToken;
+        const obj = await refreshTokens(email, name);
+        res.send(obj);   
+    } catch(e) {
+        next(e);
+    }
 }

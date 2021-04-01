@@ -21,15 +21,15 @@ exports.createTransformStream = (fileName) => {
     }
 }   
 
-// exports.getAll = async (req, res, next) => { 
-//     try{
-//         const data = await Files.find({})
-//         console.log(data);
-//         res.status(200).send(data);
-//     } catch(e) {
-//         throw new Error(e);
-//     }
-// }
+exports.getAll = async (req, res, next) => { 
+    try{
+        const data = await Files.find({})
+        console.log(data);
+        res.status(200).send(data);
+    } catch(e) {
+        throw new Error(e);
+    }
+}
 
 exports.saveData = async (data) => {
     const file = new Files(data);

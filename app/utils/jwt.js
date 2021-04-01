@@ -17,23 +17,6 @@ const privatKeyAccess = process.env.publicKeyA ? process.env.privatKeyA : getKey
 const publickKeyRefresh = process.env.publicKeyA ? process.env.publicKeyR : getKey(publicUrlR);
 const privatKeyRefresh = process.env.publicKeyA ? process.env.privatKeyR : getKey(privatUrlR);
 
-// exports.refreshTokens = async (email, name) => {
-//     const newAccessToken = await jwt.createToken(email, name, {type: 'access'});
-//     const newRefreshToken = await jwt.createToken(email, name, {type: 'refresh'});
-    
-//     const fieldToken = {
-//         refreshToken: newRefreshToken
-//     }
-//     await RefreshToken.update(fieldToken, {
-//         where: { userId: id }
-//     });
-//     return {
-//         sucess: true,
-//         accessToken: newAccessToken,
-//         refreshToken: newRefreshToken
-//     };   
-
-// }
 exports.createToken = async (email, name, options) => {
     let signature = null;
     let expiresIn = null;
@@ -79,6 +62,6 @@ exports.checkToken = (token, options) => {
         const decoded = jwt.verify(token, signature);
         return decoded;
     } catch (e) {
-        return false;
+        throw new Error('Token not valid');
     }
 }

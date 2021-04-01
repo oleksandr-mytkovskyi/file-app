@@ -4,9 +4,9 @@ const auth = require('../controllers/auth.controller');
 
 module.exports = app => {
 
-  router.get("/login/google", auth.redirectSocial);
+  router.get("/login/google", auth.redirectGoogle);
 
-  router.get("/redirect/google", auth.loginSocial);
+  router.get("/redirect/google", auth.loginGoogle);
 
   // router.get("/login/facebook", (req, res, next) => {
   //   const url = googleAuth.getConnectionUrl();
@@ -17,10 +17,7 @@ module.exports = app => {
 
   router.post("/reg", auth.reg);
 
-  router.post("/refresh", (req, res, next) => {
-    // const url = googleAuth.getConnectionUrl();
-    // res.redirect(url);
-  });
+  router.post("/refresh", auth.refresh);
 
   app.use('/auth', router);
 };

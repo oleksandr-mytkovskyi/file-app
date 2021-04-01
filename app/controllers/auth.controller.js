@@ -3,14 +3,12 @@ const authServices = require('../services/auth.services');
 const { default: axios } = require('axios');
 const googleAuth = require('../utils/google-util');
 
-exports.redirectSocial = (req, res, next) => {
+exports.redirectGoogle = (req, res, next) => {
     const url = googleAuth.getConnectionUrl();
     res.redirect(url);
 }
 
-
-exports.loginSocial = async (req, res, next) => {
-    // отримали токени від google api 
+exports.loginGoogle = async (req, res, next) => {
     const code = req.query.code;
 
     const {tokens} = await auth.Oauth2Client.getToken(code);
@@ -38,4 +36,11 @@ exports.reg = (req, res, next) => {
 
 exports.login = (req, res, next) => {
     authServices.login(req, res, next);
+}
+
+exports.refresh = (req, res, next) => {
+    if(!req.body.refreshToken) {
+        throw new Error('Refresh token not found')
+    }
+    authServices.refresh(req, res, next);
 }
