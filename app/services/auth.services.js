@@ -36,7 +36,6 @@ exports.loginSocial = async (req, res, next, userData, options) => {
         }
         // updata facebook id 
         if (findUser.length !== 0 && options.type === 'facebook' && !findUser[0].socialAuth.fbUserId) {
-            console.log('updata fb');
             await User.updateOne(
                 { email: email },
                 {
@@ -51,7 +50,6 @@ exports.loginSocial = async (req, res, next, userData, options) => {
         }
         // updata google id 
         if (findUser.length !== 0 && options.type === 'google' && !findUser[0].socialAuth.gUserId) {
-            console.log('updata google');
             await User.updateOne(
                 { email: email },
                 {
