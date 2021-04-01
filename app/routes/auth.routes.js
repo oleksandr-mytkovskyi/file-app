@@ -1,7 +1,8 @@
 const googleAuth = require('../utils/google-util');
 const router = require('express').Router();
 const auth = require('../controllers/auth.controller');
-
+const { userSchemaLogin, userSchemaReg } = require('../validators/auth.validator');
+const MD = require('../middleware/authValidate.middleware');
 module.exports = app => {
 
   router.get("/login/google", auth.redirectGoogle);
@@ -13,9 +14,9 @@ module.exports = app => {
   //   res.redirect(url);
   // });
 
-  router.post("/login/", auth.login);
+  router.post("/login/", MD.authValidateMiddleware(userSchemaLogin) ,auth.login);
 
-  router.post("/reg", auth.reg);
+  router.post("/reg", MD.authValidateMiddleware(userSchemaReg), auth.reg);
 
   router.post("/refresh", auth.refresh);
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-// const multipart = require('connect-multiparty');
+const errorMiddleware = require('./middleware/error.middleware');
 
 const app = express();
 
@@ -35,6 +35,8 @@ app.get('/', (req, res) => {
 
 require('./routes/file.routes')(app);
 require('./routes/auth.routes')(app);
+
+app.use(errorMiddleware);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
