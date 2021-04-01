@@ -13,11 +13,6 @@ module.exports = app => {
 
   router.get('/redirect/facebook', auth.loginFacebook);
 
-  // router.get('/login/facebook', (req, res, next) => {
-  //   const url = googleAuth.getConnectionUrl();
-  //   res.redirect(url);
-  // });
-
   router.post('/login/', MD.authValidateMiddleware(userSchemaLogin) ,auth.login);
 
   router.post('/reg', MD.authValidateMiddleware(userSchemaReg), auth.reg);
