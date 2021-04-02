@@ -156,10 +156,6 @@ exports.login = async (req, res, next) => {
     }
 }
 
-exports.refresh = (req, res, next) => {
-
-}
-
 exports.refresh = async (req, res, next) => {
     try {
         const { refreshToken } = req.body;
